@@ -176,7 +176,7 @@ host 10.31.50.6 255.255.255.0
 client-identifier 001a.0704.7f5b
 ip dhcp pool CAMERA8
 host 10.31.50.8 255.255.255.0
-client-identifier 001a.0709.c258 
+client-identifier 001a.0709.c684
 end
 show ip dhcp binding
 
