@@ -1,0 +1,72 @@
+
+config t
+   hostname R4
+   enable secret pass
+   service password-encryption
+   no logging console
+   no ip domain-lookup
+   int e1/0
+   no shut
+   ip add 10.1.4.5 255.255.255.252
+   int e1/1
+   no shut
+   ip add 10.1.4.9 255.255.255.252
+   int e1/2
+   no shut
+   ip add 10.1.1.10 255.255.255.252
+   do sh ip int brief 
+   do copy run sta
+   
+   config t
+   hostname R3
+   enable secret pass
+   service password-encryption
+   no logging console
+   no ip domain-lookup
+   int e1/1
+   no shut
+   ip add 10.1.1.6 255.255.255.252
+   int e1/2
+   no shut
+   ip add 10.1.1.9 255.255.255.252
+   do sh ip int brief 
+   do copy run sta
+
+   config t
+   hostname R2
+   enable secret pass
+   service password-encryption
+   no logging console
+   no ip domain-lookup
+   int e1/1
+   no shut
+   ip add 10.1.1.5 255.255.255.252
+   int e1/2
+   no shut
+   ip add 10.1.1.2 255.255.255.252
+   do sh ip int brief 
+   do copy run sta
+
+config t
+   hostname R1
+   enable secret pass
+   service password-encryption
+   no logging console
+   no ip domain-lookup
+   int e1/0
+   no shut
+   ip add 10.1.1.1 255.255.255.252
+   int e1/1
+   no shut
+   ip add 208.8.8.1 255.255.255.252
+   int e1/2
+   no shut
+   ip add 207.7.7.1 255.255.255.252
+   int e1/3
+   no shut
+   ip add 209.9.9.1 255.255.255.252
+   do sh ip int brief 
+   do copy run sta
+
+
+   
