@@ -1,0 +1,17 @@
+To enable restcon to allow another means to configure a router/switch
+!@Cisco
+conf t
+ username admin priv 15 secret pass
+ ip http server
+ ip http secure-server
+ restconf
+ end
+
+RESCONF - 443/HTTPS, JSON/XML, YANG (DATA MODELING LANGUAGE), http verbs/methods
+NETCONF - 830/SSH, XML, YANG (DATA MODELING LANGUAGE), rpc (remote procedural call over shh)
+
+
+DEFAULT CONFIG OF ROUTERS/SWITCHES
+1. CLI
+API
+2. RESTCONF/NETCONF

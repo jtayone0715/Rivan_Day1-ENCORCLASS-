@@ -1,0 +1,144 @@
+config t
+int gi 2
+no shut
+ip add 192.168.102.12 255.255.255.0
+line vty 0 14
+exec-timeout 0 0
+transport input all
+iox
+interface GigabitEthernet1
+ip address dhcp
+ip nat outside
+no shut
+exit
+!
+interface VirtualPortGroup0
+ip address 192.168.35.1 255.255.255.0
+ip nat inside
+exit
+!
+ip nat inside source list GS_NAT_ACL interface GigabitEthernet1 overload
+ip access-list standard GS_NAT_ACL
+permit 192.168.0.0 0.0.255.255
+!
+app-hosting appid guestshell
+ app-vnic gateway1 virtualportgroup 0 guest-interface 0
+    guest-ipaddress 192.168.35.3 netmask 255.255.255.0	
+	app-default-gateway 192.168.35.1  guest-interface 0 
+	name-server0 1.1.1.1
+ app-resource profile custom 
+   cpu 1500 
+   memory 512
+   persist-disk 1000
+end
+
+
+
+
+TASK2: AUTOMATE LO 0, WHEN SHUTDOWN WILL AUTOMATICALLY FIX ITSELF
+config t
+no event manager applet BANTAYLo0
+event manager applet BANTAYLo0
+ event syslog pattern "Interface Loopback0.* down" period 1
+ action 2.0 cli command "enable"
+ action 2.1 cli command "config t"
+ action 2.2 cli command "interface lo0"
+ action 2.3 cli command "no shutdown"
+ action 3.0 syslog msg "GagoKA!!,MATIK Loopback0 was brought up via AUTOMATION"
+ end
+event manager run BANTAYLo0
+
+TASK3
+config t
+no event manager applet GAWAloop
+event manager applet GAWAloop
+ event none
+ action 1.0 puts "How many Loopback interfaces do you wish to create?"
+ action 1.1 puts nonewline "> "
+ action 1.2 gets num 
+ action 2.0 cli command "enable"
+ action 2.1 cli command "conf t"
+ action 3.0 set i "1"
+ action 3.1 while $i le $num
+ action 3.2  cli command "interface Loopback $i"
+ action 3.3  cli command "ip address $i.$i.$i.$i 255.255.255.255"
+ action 3.4  increment i 1
+ action 3.5 end
+ action 4.0 cli command "end"
+ end
+ event manager run GAWAloop
+ 
+ TASK4: using python applet to configure/execute cisco commands
+ config t
+no event manager applet siraloop
+event manager applet siraloop
+ event none
+ action 1.0 puts "How many Loopback interfaces do you wish to create?"
+ action 1.1 puts nonewline "> "
+ action 1.2 gets num 
+ action 2.0 cli command "enable"
+ action 2.1 cli command "conf t"
+ action 3.0 set i "1"
+ action 3.1 while $i le $num
+ action 3.2  cli command "no interface Loopback $i"
+ action 3.4  increment i 1
+ action 3.5 end
+ action 4.0 cli command "end"
+ end
+
+event manager run siraloop
+
+TASK5 (PYTHON)
+import cli
+
+cvar1 = [
+    "show ip int brief",
+]
+
+for k in cvar1:
+    cli.executep(k)
+	
+	
+	import cli
+
+cvar2 = [
+    "show version",
+]
+
+for k in cvar2:
+    cli.executep(k)
+	
+	
+	TASK6: CONFIGURE PYTHON VS EXECUTE PYTHON
+	import cli
+
+cvar3 = '''hostname AUTOMATE 1
+int loop 4
+ip add 4.4.4.4 255.255.255.255
+int loop 5
+ip add 5.5.5.5 255.255.255.255
+int loop 6
+ip add 6.6.6.6 255.255.255.255
+end
+'''
+cli.configurep(cvar3)
+
+TASK7
+import cli
+cmd3 = '''
+    ip dhcp pool MINILINUX
+    network 192.168.102.0 255.255.255.0
+    default-router 192.168.102.11
+    domain-name MINILINUX.COM
+    dns-server 8.8.8.8
+    END
+'''
+cli.configurep(cmd3)
+
+TASK8: HOW TO ENABLE RESTCONF 
+config t
+!username admin privilege 15 secret pass
+ip http secure-server
+ip http authentication local
+restconf
+end

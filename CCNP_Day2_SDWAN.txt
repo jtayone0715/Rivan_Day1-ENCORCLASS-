@@ -1,0 +1,126 @@
+
+Device Planes
+- Control Plane
+- Data Plane
+- Mgt Plane
+
+vManager>cManager
+vSmart-Controller>
+vBond>cBond
+
+SDWAN - EVE-NGLabs (download on Day 3)
+1. To check the services status in the vManager
+admin/C1sco123
+
+request nms all status
+
+2. vBond>cBond IP:12346
+
+3. Cloud Config line 998-1017
+conf t
+ int lo8
+  ip add 8.8.8.8 255.255.255.255
+ router bgp 1
+  bgp log-neighbor-changes
+  neighbor 192.168.20.1 remote-as 100
+  neighbor 192.168.20.5 remote-as 100
+  neighbor 192.168.20.9 remote-as 100
+  address-family ipv4
+   neighbor 192.168.20.1 activate
+   neighbor 192.168.20.5 activate
+   neighbor 192.168.20.9 activate
+   neighbor 192.168.20.1 as-override
+   neighbor 192.168.20.5 as-override
+   neighbor 192.168.20.9 as-override
+   network 8.8.8.8 mask 255.255.255.255
+   network 192.168.20.0 mask 255.255.255.0
+   network 172.16.10.0 mask 255.255.255.248
+   network 10.69.255.0 mask 255.255.255.248
+   end
+
+To test, ping vBond from EdgeRouters (ex. Luzon)
+
+3. Edge Roputer Config line 1294 - 1324
+
+4. Organization Name must match at the certificate
+
+5. in Edge Router, 
+- vshell to go linux from Cisco (to get the copied certificate)
+- create a certificate using vi and put it in /home/admin/pkicerts/(created file is rivanpki.ca)
+- command to install the cert (go back to cisco from linux)
+- request root-cert-chain install /home/admin/pkicerts/rivanpki.ca
+
+7. in Edge Router, command to create a certificate csr for the root CA, use vi
+request csr upload /home/admin/pkicerts/min.csr
+
+8. to sign the certificate csr by the root CA (Another Server, PKI Server)
+crypto pki server rivanpki request pkcs10 terminal
+(paste the csr)
+(granted csr is generated)
+9. in Edge Router, command to enter the granted cert
+
+
+-----BEGIN CERTIFICATE-----
+MIIDIDCCAgigAwIBAgIBATANBgkqhkiG9w0BAQsFADAhMR8wHQYDVQQDExZyb290
+Y2EuUklWQU5DT1JQLmxvY2FsMB4XDTI2MDExODE5MDIxMloXDTI5MDExNzE5MDIx
+MlowITEfMB0GA1UEAxMWcm9vdGNhLlJJVkFOQ09SUC5sb2NhbDCCASIwDQYJKoZI
+hvcNAQEBBQADggEPADCCAQoCggEBANHmliLVoDJpoP/QYY9BYNoM5nYmqHTiWrcz
+/edesixyK6l4a5e4sFVjFnUxf/+1ND4FIUE3zsDDJEtvmiziO+/ObM+e34uSvQKU
+UoLIsUC96LQ+uwSrcWlA+0EYb9x+uHj1+sKKFE1n2paWcWHYxyy4Fdg0h/8vV4jJ
+/yLvPrsI0Tp8HvZBMiNQmZihliNc9eiBToeWci3FkIbpoylOsih+Pt9gAjHisJpJ
+2mATA0xcz5dt0DHM49zyIYUm4/F8i/NehDi98RanANgBlFVHHdIrcikAtqKq2usg
+iTtxqfRDGfinEp7N2lQcflQmwkwrGrfpTC4FX5+QLtVRst//560CAwEAAaNjMGEw
+DwYDVR0TAQH/BAUwAwEB/zAOBgNVHQ8BAf8EBAMCAYYwHwYDVR0jBBgwFoAUWTJM
+3TFjBLb5mucfAOAjH+36gPQwHQYDVR0OBBYEFFkyTN0xYwS2+ZrnHwDgIx/t+oD0
+MA0GCSqGSIb3DQEBCwUAA4IBAQA3f/bSd3vrB6u5F6nKMufwPoxVkRAnrTba1Ss+
+jvnjJIZ0MbXnZdHaJyZM6Lof58HRE66Kg8sYeyd+VRHthSjR+rBGfqovUqm0mTeS
+4NdwngebSbP/zrZKNsu7o/dazfJOdnNBrSqrWKoDliwXdtfrwWbei6/swX4WBVEF
+EthIAgr2uvKKbKJleBk9j5spAz9JS9nAI2nJ0D/scFbpxcxHtjuNSypGxbvUA6E8
+CihCAdhQxaGsO00S598LTCgtQepq3A0o39ER1u7L2Qa19lZXKr7jVVs7MTJlnXZo
+dVb5NArbTAGGmpvcr8FdxjMN8LPBvD9a22GpnHUkZJxI1iah
+-----END CERTIFICATE-----
+
+-----BEGIN CERTIFICATE REQUEST-----
+MIIDSTCCAjECAQAwgcgxCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpDYWxpZm9ybmlh
+MREwDwYDVQQHEwhTYW4gSm9zZTESMBAGA1UECxMJUklWQU5DT1JQMRYwFAYDVQQK
+Ew1DaXNjbyBTeXN0ZW1zMUEwPwYDVQQDEzh2ZWRnZS01ZjRiZTE3Yi04ZTZhLTQ2
+YWUtOTQ2Ny0zNWIyNmY1ZDU2OWEtMS52aXB0ZWxhLmNvbTEiMCAGCSqGSIb3DQEJ
+ARYTc3VwcG9ydEB2aXB0ZWxhLmNvbTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCC
+AQoCggEBAKDZHbxLY/sNb33mh0NkY1Empr2om9foe3QHOr8RCO2ID+ansVjgcSG+
+oCdNJDf0tFdL1ErfR5sKAbDe6PXkMdW8JP1V7wiIKZL/61hA65PkWDsu7Q9dqYF+
+P9EP1biclCgAiI0h4sZzGmRUHNlHnpVdXcCNOS27Bbma7TauPP9hSofWHgvS/FXz
+MPI598m5xdxfkocabypD0oMAMi/4fPZW376oo69a5K8RriLTO5MmonAM3kaXqXBe
+qk8NJJa7fTRmEg+LPWM3TlvCjUVBDISvEmtir8ii85y0rGdeVdgu9aOqoTHW3Vh9
+BuuAMnPXPP41QFuZM+JFMepUVShw3esCAwEAAaA7MDkGCSqGSIb3DQEJDjEsMCow
+CQYDVR0TBAIwADAdBgNVHQ4EFgQUeQ5dIVNA4/yP5NmdoCB5KKPDdbowDQYJKoZI
+hvcNAQELBQADggEBACDXNqERcp0Z2d2d0rw+CEujlZ02cNCb2ZO7Ftg2OwAig29I
+Sk6Mi1GmhR2Yc2+oyYPv/1XP8VjaatM0RUQNTZSMy9VxtwRKKhauYCzfPlxYZDjh
+3OlZy5V6ht89KZ0eEDMsOSmdxB03gUpVnzuahCzeqM5eHqjE12g6QnAoL4SOAkBe
+OLdXlc7Jlt4xROjulpu6MARHUh8V3pvuGVcNohEMWk7/2AsBfJxdmjUpoYEWGFHD
+Y9oYpWL/B2omrFlYdwYFPRoL5fErBEbteduC9XTKhFwRdAHfg6pRw0kct0pFbs3G
+6lsqAsj2fMgoFnRQLYx6sfIX7fX+oxU+duG86hQ=
+-----END CERTIFICATE REQUEST-----
+
+% Granted certificate:
+-----BEGIN CERTIFICATE-----
+MIIDuDCCAqCgAwIBAgIBBzANBgkqhkiG9w0BAQsFADAhMR8wHQYDVQQDExZyb290
+Y2EuUklWQU5DT1JQLmxvY2FsMB4XDTI2MDYyMTExNDAwM1oXDTI3MDYyMTExNDAw
+M1owgcgxCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpDYWxpZm9ybmlhMREwDwYDVQQH
+EwhTYW4gSm9zZTESMBAGA1UECxMJUklWQU5DT1JQMRYwFAYDVQQKEw1DaXNjbyBT
+eXN0ZW1zMUEwPwYDVQQDEzh2ZWRnZS01ZjRiZTE3Yi04ZTZhLTQ2YWUtOTQ2Ny0z
+NWIyNmY1ZDU2OWEtMS52aXB0ZWxhLmNvbTEiMCAGCSqGSIb3DQEJARYTc3VwcG9y
+dEB2aXB0ZWxhLmNvbTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAKDZ
+HbxLY/sNb33mh0NkY1Empr2om9foe3QHOr8RCO2ID+ansVjgcSG+oCdNJDf0tFdL
+1ErfR5sKAbDe6PXkMdW8JP1V7wiIKZL/61hA65PkWDsu7Q9dqYF+P9EP1biclCgA
+iI0h4sZzGmRUHNlHnpVdXcCNOS27Bbma7TauPP9hSofWHgvS/FXzMPI598m5xdxf
+kocabypD0oMAMi/4fPZW376oo69a5K8RriLTO5MmonAM3kaXqXBeqk8NJJa7fTRm
+Eg+LPWM3TlvCjUVBDISvEmtir8ii85y0rGdeVdgu9aOqoTHW3Vh9BuuAMnPXPP41
+QFuZM+JFMepUVShw3esCAwEAAaNTMFEwDwYDVR0TAQH/BAUwAwEB/zAfBgNVHSME
+GDAWgBRZMkzdMWMEtvma5x8A4CMf7fqA9DAdBgNVHQ4EFgQUeQ5dIVNA4/yP5Nmd
+oCB5KKPDdbowDQYJKoZIhvcNAQELBQADggEBAJ5clxdKfiBinjoFxYNvJMFpoGgB
+TMbZwoFdCPNI9HDJv7xckRVG1c47hWFZWiMPWsfSTNHalLuTN3NizDzzwUL7EibV
+1dmDXC+TTb9ZAJy71D7esV/tVKG+xR7JTAkCnl143QXJ4dlNS1kNYo27ExgAx/dT
+OVaCz3hVGGLXTdG4UXkK2UGO1uIkbBzn6kr6eJaZzFUGum1HLp8TU9i0y4nJSEfh
+B158SyqYpNGfpwxUYNXUt7m2ewYr0A2cLuJhdKkR16+UmbROBSStZg4Mux/ulJ8q
+ktQ1ki1mXJYHydtpVdfXvW3JKtY8a9CK4Yj3fPASfIraubQPJMi4wDRjmO8=
+-----END CERTIFICATE-----
