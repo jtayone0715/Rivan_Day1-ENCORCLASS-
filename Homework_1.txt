@@ -218,3 +218,28 @@ config t
    do sh ip int brief 
    do copy run sta
    
+config t
+   hostname GOOGLEDNS
+   enable secret pass
+   service password-encryption
+   no logging console
+   no ip domain-lookup
+   int e0/1
+   no shut
+   ip add 45.4.5.5 255.255.255.252
+   int e0/2
+   no shut
+   ip add 25.2.5.5 255.255.255.248
+   int e0/3
+   no shut
+   ip add 35.3.5.5 255.255.255.248
+   int Lo0
+   no shut
+   ip add 55.55.55.55 255.255.255.255
+   int Lo8
+   no shut
+   ip add 8.8.8.8 255.255.255.255
+   do sh ip int brief 
+   do copy run sta
+   
+
