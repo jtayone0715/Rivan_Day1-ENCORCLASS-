@@ -68,5 +68,86 @@ config t
    do sh ip int brief 
    do copy run sta
 
+config t
+   hostname A1
+   enable secret pass
+   service password-encryption
+   no logging console
+   no ip domain-lookup
+   int VLAN 100
+   no shut
+   ip add 192.168.1.131 255.255.255.248
+   int VLAN 10
+   int e0/0
+   switchport mode access 
+   switchport access vlan 10
+   do sh ip int brief 
+   do sh vlan br
+   do copy run sta
 
-   
+   config t
+   hostname A2
+   enable secret pass
+   service password-encryption
+   no logging console
+   no ip domain-lookup
+   int VLAN 100
+   no shut
+   ip add 192.168.1.132 255.255.255.248
+   int VLAN 10
+   int e1/0
+   switchport mode access 
+   switchport access vlan 10
+   do sh ip int brief 
+   do sh vlan br
+   do copy run sta
+
+   config t
+   hostname D1
+   enable secret pass
+   service password-encryption
+   no logging console
+   no ip domain-lookup
+   int VLAN 100
+   no shut
+   ip add 192.168.1.129 255.255.255.248
+   int VLAN 10
+   no shut
+   ip add 10.2.1.1 255.255.255.240
+   int VLAN 20
+   no shut
+   ip add 10.2.2.1 255.255.255.240
+   int e1/0
+   switchport mode access 
+   switchport access vlan 100
+   int e1/1
+   no shut
+   ip add 10.1.4.6 255.255.255.252
+   do sh ip int brief 
+   do sh vlan br
+   do copy run sta
+
+   config t
+   hostname D2
+   enable secret pass
+   service password-encryption
+   no logging console
+   no ip domain-lookup
+   int VLAN 100
+   no shut
+   ip add 192.168.1.130 255.255.255.248
+   int VLAN 10
+   no shut
+   ip add 10.2.1.2 255.255.255.240
+   int VLAN 20
+   no shut
+   ip add 10.2.2.2 255.255.255.240
+   int e1/0
+   switchport mode access 
+   switchport access vlan 20
+   int e1/1
+   no shut
+   ip add 10.1.4.10 255.255.255.252
+   do sh ip int brief 
+   do sh vlan br
+   do copy run sta
