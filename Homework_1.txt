@@ -58,13 +58,13 @@ config t
    ip add 10.1.1.1 255.255.255.252
    int e1/1
    no shut
-   ip add 208.8.8.1 255.255.255.252
+   ip add 208.8.8.1 255.255.255.248
    int e1/2
    no shut
    ip add 207.7.7.1 255.255.255.252
    int e1/3
    no shut
-   ip add 209.9.9.1 255.255.255.252
+   ip add 209.9.9.1 255.255.255.248
    do sh ip int brief 
    do copy run sta
 
@@ -151,3 +151,70 @@ config t
    do sh ip int brief 
    do sh vlan br
    do copy run sta
+
+config t
+   hostname I1
+   enable secret pass
+   service password-encryption
+   no logging console
+   no ip domain-lookup
+   int e1/1
+   no shut
+   ip add 24.2.4.4 255.255.255.248
+   int e1/2
+   no shut
+   ip add 45.4.5.4 255.255.255.252
+   int e1/3
+   no shut
+   ip add 208.8.8.4 255.255.255.248
+   int Lo0
+   no shut
+   ip add 44.44.44.44 255.255.255.255
+   do sh ip int brief 
+   do copy run sta
+   
+config t
+   hostname I2
+   enable secret pass
+   service password-encryption
+   no logging console
+   no ip domain-lookup
+   int e1/1
+   no shut
+   ip add 24.2.4.2 255.255.255.248
+   int e1/2
+   no shut
+   ip add 32.3.2.2 255.255.255.252
+   int e1/3
+   no shut
+   ip add 207.7.7.2 255.255.255.252
+   int e0/2
+   no shut
+   ip add 25.2.5.2 255.255.255.248
+   int Lo0
+   no shut
+   ip add 22.22.22.22 255.255.255.255
+   do sh ip int brief 
+   do copy run sta
+   
+config t
+   hostname I3
+   enable secret pass
+   service password-encryption
+   no logging console
+   no ip domain-lookup
+   int e1/1
+   no shut
+   ip add 35.3.5.3 255.255.255.248
+   int e1/2
+   no shut
+   ip add 32.3.2.3 255.255.255.252
+   int e1/3
+   no shut
+   ip add 209.9.9.3 255.255.255.248
+   int Lo0
+   no shut
+   ip add 33.33.33.33 255.255.255.255
+   do sh ip int brief 
+   do copy run sta
+   
